@@ -11,3 +11,7 @@ ul {
   gap: 35px;
   margin-top: 35px;
 }
+
+.spinner {
+  display: flex;
+}

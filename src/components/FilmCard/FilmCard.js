@@ -5,8 +5,7 @@ import { Card } from 'antd'
 
 export default class FilmCard extends Component {
   genresToTags = () => {
-    const [, childrens] = this.props.children
-    const { genres } = childrens
+    const { genres } = this.props.children
     if (genres) {
       return (
         <>
@@ -21,7 +20,7 @@ export default class FilmCard extends Component {
   }
 
   render() {
-    const { title, overview, releaseDate, img } = this.props.children[1]
+    const { title, overview, releaseDate, img } = this.props.children
     const isLoading = title === null ? true : false
     const displayedDate = new Date(releaseDate)
     let textClass = 'card-list__element--text'

@@ -7,9 +7,9 @@ p {
 }
 
 .card-list__element--text {
-  margin-top: 7px;
   overflow: hidden;
   max-height: 129px;
+  max-width: 240px;
   line-height: 22px;
   text-align: justify;
   display: -webkit-box;
@@ -19,9 +19,11 @@ p {
 
 .tag-list {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .tag-list__tag {
+  margin-bottom: 7px;
   font-size: 12px;
   text-align: center;
   margin-right: 8px;
