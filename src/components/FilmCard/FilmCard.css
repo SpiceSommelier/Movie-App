@@ -1,0 +1,43 @@
+h2 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.card-list__element--text {
+  margin-top: 7px;
+  overflow: hidden;
+  max-height: 129px;
+  line-height: 22px;
+  text-align: justify;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.tag-list {
+  display: flex;
+}
+
+.tag-list__tag {
+  font-size: 12px;
+  text-align: center;
+  margin-right: 8px;
+  padding: 0 2px;
+  border-radius: 2px;
+  background: linear-gradient(0deg, #fafafa, #fafafa);
+  border: 1px solid #d9d9d9;
+  color: #827e7e;
+}
+
+.card-list__element--film-title {
+  font-size: 20px;
+}
+
+.card-list__element--release-date {
+  margin-bottom: 7px;
+  font-size: 12px;
+  color: #827e7e;
+}
