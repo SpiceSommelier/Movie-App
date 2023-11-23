@@ -1,5 +1,5 @@
 export default class MovieService {
-  _apiKey = '?api_key=6c1cb5e7650f142dcbf483d20c027445'
+  _apiKey = 'api_key=6c1cb5e7650f142dcbf483d20c027445'
   _apiBaseUrl = 'https://api.themoviedb.org/3/'
   _apiBaseUrlImg = 'https://image.tmdb.org/t/p/'
 
@@ -9,21 +9,32 @@ export default class MovieService {
     if (!res.ok) {
       throw new Error(`Couldnt fetch${url} received ${res.status}`)
     }
-    return await res.url
+    return res.url
   }
 
-  async getResource(url) {
-    const res = await fetch(`${this._apiBaseUrl}${url}${this._apiKey}`)
+  async getResource(url, page = 1) {
+    const res = await fetch(
+      `${this._apiBaseUrl}${url}?${this._apiKey}&page=${page}`
+    )
     if (!res.ok) {
       throw new Error(`Couldnt fetch${url} received ${res.status}`)
     }
     return await res.json()
   }
-  async requestTopRated() {
-    return this.getResource('movie/top_rated')
+  async getResourceBySearch(request, page = 1) {
+    const res = await fetch(
+      `${this._apiBaseUrl}search/movie?query=${request}&${this._apiKey}&page=${page}`
+    )
+    if (!res.ok) {
+      throw new Error(`Couldnt fetch${request} received ${res.status}`)
+    }
+    return await res.json()
   }
-  async requestTopTrending(timeWindow = false) {
+  async requestTopRated(page) {
+    return this.getResource('movie/top_rated', page)
+  }
+  async requestTopTrending(timeWindow = false, page) {
     timeWindow = timeWindow ? 'week' : 'day'
-    return this.getResource(`trending/movie/${timeWindow}`)
+    return this.getResource(`trending/movie/${timeWindow}`, page)
   }
 }

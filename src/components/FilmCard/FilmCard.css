@@ -9,7 +9,7 @@ p {
 .card-list__element--text {
   overflow: hidden;
   max-height: 129px;
-  max-width: 240px;
+  max-width: 265px;
   line-height: 22px;
   text-align: justify;
   display: -webkit-box;
@@ -36,6 +36,7 @@ p {
 
 .card-list__element--film-title {
   font-size: 20px;
+  max-width: 265px;
 }
 
 .card-list__element--release-date {

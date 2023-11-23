@@ -5,11 +5,12 @@ ul {
 }
 
 .card-list {
-  max-width: 938px;
   display: grid;
   grid-template-columns: 50% 50%;
   gap: 35px;
   margin-top: 35px;
+  margin-left: 35px;
+  margin-right: 45px;
 }
 
 .spinner {
