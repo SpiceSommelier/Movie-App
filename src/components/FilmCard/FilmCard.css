@@ -44,3 +44,9 @@ p {
   font-size: 12px;
   color: #827e7e;
 }
+
+@media (max-width: 1202px) {
+  .card-list__element {
+    margin: 0 auto;
+  }
+}

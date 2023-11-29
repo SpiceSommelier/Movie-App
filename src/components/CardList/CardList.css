@@ -13,6 +13,14 @@ ul {
   margin-right: 45px;
 }
 
+@media (max-width: 1202px) {
+  .card-list {
+    grid-template-columns: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
 .spinner {
   display: flex;
 }
