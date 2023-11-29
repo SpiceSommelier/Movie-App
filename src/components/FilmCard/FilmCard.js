@@ -19,8 +19,54 @@ export default class FilmCard extends Component {
     }
   }
 
+  searchInLocal = (id) => {
+    let local = localStorage.getItem('rated')
+    let rate = 0
+    if (local) {
+      local = JSON.parse(local)
+      local.results.forEach((element) => {
+        if (element.id === id) rate = element.rate
+      })
+    }
+
+    return rate
+  }
+
+  rateFilm = (value) => {
+    const { id } = this.props.children
+    const local = localStorage.getItem('rated')
+    if (local) {
+      const parsedLocal = JSON.parse(local)
+      if (this.isExist(id)) {
+        parsedLocal.results = [
+          ...parsedLocal.results,
+          {
+            ...this.props.children,
+            rate: value,
+          },
+        ]
+        localStorage.setItem('rated', JSON.stringify(parsedLocal))
+      }
+    } else {
+      const obj = {
+        results: [],
+      }
+      obj.results.push({ ...this.props.children, rate: value })
+      localStorage.setItem('rated', JSON.stringify(obj))
+    }
+  }
+
+  isExist = (id) => {
+    const local = JSON.parse(localStorage.getItem('rated'))
+    let flag = true
+    local.results.forEach((element) => {
+      if (element.id === id) flag = false
+    })
+    return flag
+  }
+
   render() {
-    const { title, overview, releaseDate, img, voteAverage } =
+    const { title, overview, releaseDate, img, voteAverage, id } =
       this.props.children
     const isLoading = title === null ? true : false
     const displayedDate = new Date(releaseDate)
@@ -77,10 +123,11 @@ export default class FilmCard extends Component {
                 marginTop: 'auto',
                 marginBottom: '10px',
               }}
-              disabled
               count={10}
-              defaultValue={voteAverage}
               allowHalf
+              allowClear
+              onChange={this.rateFilm}
+              defaultValue={this.searchInLocal(id)}
             />
           </div>
           <ShowRaiting rating={voteAverage} />
@@ -92,9 +139,20 @@ export default class FilmCard extends Component {
 
 const ShowRaiting = ({ rating }) => {
   let borderColor = 'grey'
-  if (rating < 6.6) borderColor = 'red'
-  if (rating >= 6.6) borderColor = 'yellow'
-  if (rating >= 7.3) borderColor = 'green'
+
+  switch (true) {
+    case rating <= 3:
+      borderColor = '#E90000'
+      break
+    case rating > 3.1 && rating <= 5:
+      borderColor = '#E97E00'
+      break
+    case rating > 5 && rating < 7:
+      borderColor = '#E9D100'
+      break
+    default:
+      borderColor = '#66E900'
+  }
   return (
     <div
       className="rating"

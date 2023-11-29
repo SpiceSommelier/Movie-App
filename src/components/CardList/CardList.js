@@ -20,7 +20,15 @@ export default class CardList extends Component {
       this.requestItems()
     }
     if (prevProps.currentList !== this.props.currentList) {
-      this.requestItems()
+      if (this.props.currentList === 'userRates') this.renderFromLocal()
+      if (
+        this.props.currentList !== 'search' &&
+        this.props.currentList !== 'userRates'
+      )
+        this.requestItems()
+      if (this.props.currentList === 'search' && this.props.searchRequest) {
+        this.requestItems()
+      }
     }
   }
 
@@ -31,6 +39,18 @@ export default class CardList extends Component {
       state: false,
       message: null,
     },
+  }
+
+  renderFromLocal() {
+    let local = localStorage.getItem('rated')
+    if (local) {
+      local = JSON.parse(local)
+      const newArr = [...local.results]
+      this.setState({
+        itemList: newArr,
+        loading: false,
+      })
+    }
   }
 
   async requestItems() {
@@ -45,21 +65,25 @@ export default class CardList extends Component {
     try {
       const { currentList } = this.props
       let itemList = []
-      if (currentList === 'trending') {
-        itemList = await this.movieService.requestTopTrending( true,
-          this.props.currentPage
-        )
-      }
-      if (currentList === 'rated') {
-        itemList = await this.movieService.requestTopRated(
-          this.props.currentPage
-        )
-      }
-      if (currentList === 'search' && this.props.searchRequest) {
-        itemList = await this.movieService.getResourceBySearch(
-          this.props.searchRequest,
-          this.props.currentPage
-        )
+      switch (currentList) {
+        case 'trending':
+          itemList = await this.movieService.requestTopTrending(
+            true,
+            this.props.currentPage
+          )
+          break
+        case 'rated':
+          itemList = await this.movieService.requestTopRated(
+            this.props.currentPage
+          )
+          break
+        case 'search':
+          itemList = await this.movieService.getResourceBySearch(
+            this.props.searchRequest,
+            this.props.currentPage
+          )
+          break
+        default:
       }
       const genresList = await this.movieService.getResource('genre/movie/list')
       const newArr = itemList.results.map((element) => {
@@ -81,13 +105,14 @@ export default class CardList extends Component {
           element.img =
             'https://cdn-icons-png.flaticon.com/512/4054/4054617.png'
         }
-
-        element.genres = element.genres.map((el) => {
-          genresList.genres.forEach((e) => {
-            if (e.id === el) el = e.name
+        if (currentList !== 'userRates') {
+          element.genres = element.genres.map((el) => {
+            genresList.genres.forEach((e) => {
+              if (e.id === el) el = e.name
+            })
+            return el
           })
-          return el
-        })
+        }
       }
 
       this.setState({
@@ -96,6 +121,7 @@ export default class CardList extends Component {
       })
     } catch (err) {
       this.onError(err)
+      console.log(err)
     }
   }
 
@@ -107,6 +133,23 @@ export default class CardList extends Component {
 
   render() {
     const { itemList, loading, error } = this.state
+    const { currentList, searchRequest } = this.props
+
+    if (currentList === 'userRates') {
+      if (
+        !localStorage.getItem(
+          'rated' || localStorage.getItem('rated').results.length <= 0
+        )
+      ) {
+        return (
+          <Alert
+            message="No rated films yet"
+            style={{ margin: '30px 30px', height: '100px' }}
+          />
+        )
+      }
+    }
+
     if (itemList !== null && itemList.length <= 0) {
       return (
         <Alert
@@ -115,11 +158,7 @@ export default class CardList extends Component {
         />
       )
     }
-
-    if (
-      this.props.currentList === 'search' &&
-      this.props.searchRequest === null
-    ) {
+    if (currentList === 'search' && searchRequest === null) {
       return (
         <Alert
           type="info"

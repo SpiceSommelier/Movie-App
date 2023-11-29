@@ -5,7 +5,6 @@ import { Menu } from 'antd'
 import debounce from 'lodash.debounce'
 
 export default class Header extends Component {
-  debouncedSearchRequest = debounce(this.props.searchRequest, 1000)
   state = {
     searchValue: '',
   }
@@ -14,6 +13,7 @@ export default class Header extends Component {
       searchValue: '',
     })
   }
+  debouncedSearchRequest = debounce(this.props.searchRequest, 1000)
   debouncedClearSearch = debounce(this.clearSearch, 1000)
   items = [
     {
@@ -30,6 +30,10 @@ export default class Header extends Component {
     {
       label: 'Search',
       key: 'search',
+    },
+    {
+      label: 'Your rates',
+      key: 'userRates',
       style: {
         marginRight: 'auto',
       },

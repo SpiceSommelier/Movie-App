@@ -25,19 +25,9 @@ export default class App extends Component {
   }
 
   render() {
-    const { currentList, currentPage, searchRequest } = this.state    
-    return (
-      <>
-        <Header
-          changeList={this.changeList}
-          searchRequest={this.searchFilm}
-          currentList={currentList}
-        />
-        <CardList
-          currentList={currentList}
-          searchRequest={searchRequest}
-          currentPage={currentPage}
-        />
+    const { currentList, currentPage, searchRequest } = this.state
+    const pagination =
+      currentList !== 'userRates' ? (
         <Pagination
           style={{ margin: '30px', position: 'relative', left: '33%' }}
           total={200}
@@ -50,6 +40,20 @@ export default class App extends Component {
             })
           }}
         />
+      ) : null
+    return (
+      <>
+        <Header
+          changeList={this.changeList}
+          searchRequest={this.searchFilm}
+          currentList={currentList}
+        />
+        <CardList
+          currentList={currentList}
+          searchRequest={searchRequest}
+          currentPage={currentPage}
+        />
+        {pagination}
       </>
     )
   }
